@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.CustomerMapper">
+    <select id="showCustomer" resultType="cn.com.guimei.pojo.Customer">
+        select * from customer limit #{pageIndex},#{pageSize};
+    </select>
+    <select id="countCustomer" resultType="int">
+        select count(1) from customer;
+    </select>
+    <select id="cusPersonalInfo" parameterType="String" resultType="cn.com.guimei.pojo.Customer">
+        select * from  customer where id=#{id};
+    </select>
+    <update id="updateCustomer" parameterType="cn.com.guimei.pojo.Customer">
+        update customer set cusName=#{cusName},cusLoginName=#{cusLoginName},
+        cusPassword=#{cusPassword},cusSex=#{cusSex},cusHobby=#{cusHobby},
+        cusBirthday=#{cusBirthday} where id=#{id};
+    </update>
+    <select id="unionSelect" parameterType="map" resultType="cn.com.guimei.pojo.Customer">
+        select * from customer where 1=1
+        <if test="customer.id!=0 and customer.id!=null">
+            and id=#{customer.id}
+        </if>
+        <if test="customer.cusName!='' and customer.cusName!=null">
+            and cusName like concat('%',#{customer.cusName},'%')
+        </if>
+        <if test="customer.cusSex!='' and customer.cusSex!=null">
+            and cusSex=#{customer.cusSex}
+        </if>
+        limit #{pageIndex},#{pageSize};
+    </select>
+    <select id="countUnionCustomer" resultType="int" parameterType="cn.com.guimei.pojo.Customer">
+        select count(1) from customer where 1=1
+        <if test="id!=0 and id!=null">
+            and id=#{id}
+        </if>
+        <if test="cusName!='' and cusName!=null">
+            and cusName like concat('%',#{cusName},'%')
+        </if>
+        <if test="cusSex!='' and cusSex!=null">
+            and cusSex=#{cusSex}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.guimei.dao.SmallclassMapper">
+    <resultMap id="smallclass" type="cn.com.guimei.pojo.Smallclass">
+        <id column="id" property="id"/>
+        <result column="smallName" property="smallName"/>
+        <result column="smallBigId" property="smallBigId"/>
+        <result column="smallText" property="smallText"/>
+    </resultMap>
+    <resultMap id="smallClassExt" type="cn.com.guimei.pojo.SmallClassExt" extends="smallclass">
+        <association property="bigclass" javaType="cn.com.guimei.pojo.Bigclass">
+            <id column="id" property="id"/>
+            <result column="bigName" property="bigName"/>
+        </association>
+    </resultMap>
+
+    <select id="getTotalRecord" resultType="int" parameterType="cn.com.guimei.pojo.Smallclass">
+    select count(1) from smallclass
+    <where>
+        <if test="id!=null and id!=0">
+            id=#{id}
+        </if>
+        <if test="smallName!=null and smallName!=''">
+            and smallName like concat('%',#{smallName},'%')
+        </if>
+        <if test="smallBigId!=null and smallBigId!=0">
+            and smallBigId=#{smallBigId}
+        </if>
+    </where>
+  </select>
+    <select id="getPageData" resultMap="smallClassExt" parameterType="map">
+        select * from smallclass s, bigclass b where b.id=s.smallBigId
+        <if test="smallclass.id!=null and smallclass.id!=0">
+            and s.id=#{smallclass.id}
+        </if>
+        <if test="smallclass.smallName!=null and smallclass.smallName!=''">
+            and s.smallName like concat('%',#{smallclass.smallName},'%')
+        </if>
+        <if test="smallclass.smallBigId!=null and smallclass.smallBigId!=0">
+            and s.smallBigId=#{smallclass.smallBigId}
+        </if>
+         limit #{pageIndex},#{pageSize}
+    </select>
+    <select id="getBigClass" resultType="cn.com.guimei.pojo.Bigclass">
+        select * from bigclass;
+    </select>
+    <delete id="delete" parameterType="int">
+        delete from smallclass where id=#{id}
+        and not exists(select id from goods where goodsSmalId=#{id});
+    </delete>
+
+    <select id="queryById" parameterType="int" resultType="cn.com.guimei.pojo.Smallclass">
+        select * from smallclass where id=#{id};
+    </select>
+
+    <update id="update" parameterType="cn.com.guimei.pojo.Smallclass">
+        update smallclass
+        <trim prefix="set" suffixOverrides=",">
+            <if test="smallName!=null and smallName!=''">
+                smallName = #{smallName},
+            </if>
+            <if test="smallBigId!=null and smallBigId!=0">
+                smallBigId = #{smallBigId},
+            </if>
+            <if test="smallText!=null and smallText!=''">
+                smallText = #{smallText},
+            </if>
+        </trim>
+        <if test="id!=null and id!=0">
+            where id = #{id}
+        </if>
+    </update>
+
+    <select id="queryBySmallName" parameterType="String" resultType="cn.com.guimei.pojo.Smallclass">
+        select * from smallclass where smallName=#{smallName};
+    </select>
+</mapper>
