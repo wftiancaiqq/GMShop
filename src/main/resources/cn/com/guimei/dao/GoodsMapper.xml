@@ -56,8 +56,13 @@
         </if>
         limit #{pageIndex},#{pageSize}
     </select>
-    <select id="getSmallClass" resultType="cn.com.guimei.pojo.Smallclass">
-        select id,smallName from smallclass;
+    <select id="getSmallClass" parameterType="int" resultType="cn.com.guimei.pojo.Smallclass">
+        select id,smallName from smallclass
+        <where>
+            <if test="smallBigId!=null and smallBigId!=0">
+                smallBigId=#{smallBigId}
+            </if>
+        </where>
     </select>
     <select id="getSeller" resultType="cn.com.guimei.pojo.Seller">
         select id,sellerName from seller;

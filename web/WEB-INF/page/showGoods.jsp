@@ -8,11 +8,32 @@
     <script type="text/javascript" src="/static/js/jquery-1.8.2.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            var url="/doGoods/ajaxLoadSmallClass";
-            $.getJSON(url,function (smallClassList) {
-                $.each(smallClassList,function (index,smallclass) {
-                    $("select[name=goodsSmalId]").append(" <option value=\""+smallclass.id+"\">"+smallclass.smallName+"</option>")
+            var url1="/doGoods/ajaxLoadBigClass";
+            $.getJSON(url1,function (bigClassList) {
+                $.each(bigClassList,function (index,bigClass) {
+                    $("select[name='goodsBigId']").append(" <option value=\""+bigClass.id+"\">"+bigClass.bigName+"</option>")
                 })
+            });
+            $("select[name='goodsBigId']").change(function () {
+                var bigId=$(this).val();
+                alert(bigId);
+                if (bigId!=null && bigId!=''){
+                    $("select[name='goodsSmalId']").empty();
+                    var url2="/doGoods/ajaxLoadSmallClass?smallBigId="+bigId;
+                    $.getJSON(url2,function (smallClassList) {
+                        $.each(smallClassList,function (index,smallclass) {
+                            $("select[name='goodsSmalId']").append("<option value=\""+smallclass.id+"\">"+smallclass.smallName+"</option>")
+                        })
+                    })
+                }else {
+                    $("select[name='goodsSmalId']").empty();
+                    var url2="/doGoods/ajaxLoadSmallClass?smallBigId=0";
+                    $.getJSON(url2,function (smallClassList) {
+                        $.each(smallClassList,function (index,smallclass) {
+                            $("select[name='goodsSmalId']").append("<option value=\""+smallclass.id+"\">"+smallclass.smallName+"</option>")
+                        })
+                    })
+                }
             })
         })
     </script>
@@ -23,6 +44,10 @@
     <input type="text" name="id" placeholder="请输入商品编号" />
     <label>商品名称:</label>
     <input type="text" name="goodsName" placeholder="请输入商品名称"  />
+    <label>商品所属大分类:</label>
+    <select name="goodsBigId" id="goodsBigId">
+        <option value="">请选择</option>
+    </select>
     <label>商品所属小分类:</label>
     <select name="goodsSmalId">
         <option value="">请选择</option>
@@ -54,7 +79,7 @@
                     <td>${goods.goodsMoney}</td>
                     <td>${goods.discount.discRate*10}</td>
                     <td>${goods.goodsNumber}</td>
-                    <td>${goods.goodsImage}</td>
+                    <td><img src="/static/images/goodsImage/${goods.goodsImage}" alt="商品图片"></td>
                     <td><b class="layui-btn layui-btn-sm" onclick="del(${goods.id})">删除</b></td>
                     <td><a class="layui-btn layui-btn-sm" href="/doGoods/queryById?id=${goods.id}">修改</a></td>
                 </tr>

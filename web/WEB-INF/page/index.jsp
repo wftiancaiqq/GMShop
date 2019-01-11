@@ -18,12 +18,12 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    <img src="static\back\Image\1.png" class="layui-nav-img">
-                    ${sessionScope.superUser.userName}
+                    <img src="static/back/Image/${sessionScope.superUser.userImage}" class="layui-nav-img">
+                    <span id="userName">${sessionScope.superUser.userName}</span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd><a target="iframe_context" href="/admin/personalInfo?id=${sessionScope.superUser.id}">基本资料</a></dd>
-                    <dd><a target="iframe_context" href="">安全设置</a></dd>
+                    <dd><a target="iframe_context" href="/admin/superUserInfo?id=${sessionScope.superUser.id}">安全设置</a></dd>
                 </dl>
             </li>
             <li class="layui-nav-item"><a id="outPage" href="" class="layui-icon ">&#x1007;退出</a></li>

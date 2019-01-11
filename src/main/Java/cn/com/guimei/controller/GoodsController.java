@@ -1,10 +1,8 @@
 package cn.com.guimei.controller;
 
-import cn.com.guimei.pojo.Discount;
-import cn.com.guimei.pojo.Goods;
-import cn.com.guimei.pojo.Seller;
-import cn.com.guimei.pojo.Smallclass;
+import cn.com.guimei.pojo.*;
 import cn.com.guimei.service.GoodsService;
+import cn.com.guimei.service.SmallClassService;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +22,8 @@ import java.util.Map;
 public class GoodsController {
     @Resource
     private GoodsService goodsService;
+    @Resource
+    private SmallClassService smallClassService;
     @RequestMapping("/query")
     public String getPageData(String pageNumber, Goods goods, HttpServletRequest request){
         Map<String,Object> map=goodsService.getPageData(pageNumber,goods);
@@ -34,10 +34,16 @@ public class GoodsController {
         request.getSession().setAttribute("Map",map);
         return "showGoods";
     }
+    @RequestMapping(value = "/ajaxLoadBigClass",produces = "text/json;charset=utf-8")
+    @ResponseBody
+    public String getBigClass(){
+        List<Bigclass> bigclassList=smallClassService.getBigClass();
+        return JSONArray.toJSONString(bigclassList);
+    }
     @RequestMapping(value = "/ajaxLoadSmallClass",produces = "text/json;charset=utf-8")
     @ResponseBody
-    public String getSmallClass(){
-        List<Smallclass> smallclassList=goodsService.getSmallClass();
+    public String getSmallClass(String smallBigId){
+        List<Smallclass> smallclassList=goodsService.getSmallClass(smallBigId);
         return JSONArray.toJSONString(smallclassList);
     }
 

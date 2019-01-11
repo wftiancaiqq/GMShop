@@ -1,6 +1,7 @@
 package cn.com.guimei.dao;
 
 import cn.com.guimei.pojo.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public interface GoodsMapper {
     //获取信息总条数
     int getTotalRecord(Goods goods);
     //查询小分类的ID和名称
-    List<Smallclass> getSmallClass();
+    List<Smallclass> getSmallClass(@Param("smallBigId") int smallBigId);
     //查询折扣的ID和数值
     List<Discount> getDiscount();
     //根据Id查询

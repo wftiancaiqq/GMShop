@@ -10,7 +10,7 @@ public interface GoodsService {
     //查询
     Map<String,Object> getPageData(String num, Goods goods);
     //查询小分类的ID和名称
-    List<Smallclass> getSmallClass();
+    List<Smallclass> getSmallClass(String smallBigId);
     //查询折扣的ID和数值
     List<Discount> getDiscount();
     //删除

@@ -9,4 +9,19 @@
     <select id="personalInfo" resultType="cn.com.guimei.pojo.SuperUser" parameterType="int">
         select * from superuser where id=#{id};
     </select>
+    <update id="updateSuperUser" parameterType="cn.com.guimei.pojo.SuperUser">
+        update superuser
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userName!=null and userName!=''">
+                userName=#{userName},
+            </if>
+            <if test="userPassword!=null and userPassword!=''">
+                userPassword=#{userPassword},
+            </if>
+            <if test="userImage!=null and userImage!=''">
+                userImage=#{userImage},
+            </if>
+        </trim>
+        where id=#{id};
+    </update>
 </mapper>

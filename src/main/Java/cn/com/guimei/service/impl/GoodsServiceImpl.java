@@ -42,8 +42,12 @@ public class GoodsServiceImpl implements GoodsService {
         return map;
     }
 
-    public List<Smallclass> getSmallClass() {
-        return goodsMapper.getSmallClass();
+    public List<Smallclass> getSmallClass(String smallBigId) {
+        int bigId=0;
+        if (smallBigId!=null&&smallBigId.length()>0){
+            bigId=Integer.parseInt(smallBigId);
+        }
+        return goodsMapper.getSmallClass(bigId);
     }
 
     public List<Discount> getDiscount() {
